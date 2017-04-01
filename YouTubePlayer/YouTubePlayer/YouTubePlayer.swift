@@ -110,6 +110,8 @@ open class YouTubePlayerView: UIView, UIWebViewDelegate {
         its restricted to play only on youtube website */
     open var videoRestricted:Bool = false
     
+    open var disableExternalVideos = false
+    
     // MARK: Various methods for initialization
 
     override public init(frame: CGRect) {
@@ -349,6 +351,10 @@ open class YouTubePlayerView: UIView, UIWebViewDelegate {
 
         // Check if ytplayer event and, if so, pass to handleJSEvent
         if let url = url, url.scheme == "ytplayer" { handleJSEvent(url) }
+        
+        if disableExternalVideos, let videoID = videoID {
+            return (request.url?.absoluteString ?? "").hasPrefix("https://www.youtube.com/embed/\(videoID)")
+        }
 
         return true
     }
